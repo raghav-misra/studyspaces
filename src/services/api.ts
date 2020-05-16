@@ -86,3 +86,21 @@ export async function APIGetDeck(deckID: string) {
     return successResponse.deck;
 }
 
+export async function APIRemoveDeck(token: string, deckID: string) {
+    return false;
+    
+    const res = await fetch(`${API_ROUTE}/deleteDeck`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${token}"
+        },
+        body: JSON.stringify({ deckID })
+    });
+    
+    const successResponse = await res.json();
+
+    if (successResponse.success) console.log("Deleted Deck!");
+    else console.log(`Error while deleting deck: ${successResponse.error}`);
+}
+

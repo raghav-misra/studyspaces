@@ -8,6 +8,8 @@
                 <router-link :to="`/host/${deck}`" class="btn btn-success">Start Game</router-link>
                 <br />
                 <router-link :to="`/decks/edit/${deck}`" class="btn btn-info">Edit Deck</router-link>
+                <br />
+                <a @click="deleteDeck" class="btn btn-danger">Delete Deck</a>
             </div>
         </div>
         <div class="create-card" v-else-if="type === 'create'">
@@ -19,7 +21,8 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { APIGetDeck } from '../services/api';
+import { APIGetDeck, APIRemoveDeck } from '../services/api';
+import store from "@/store";
 
 export default Vue.extend({
     created() {
@@ -49,6 +52,9 @@ export default Vue.extend({
                 this.deckObject = deckObject as any;
                 this.hidden = false;
             }
+        },
+        deleteDeck() {
+            APIRemoveDeck(store.token as string, this.deck);
         }
     }
 });
@@ -57,7 +63,7 @@ export default Vue.extend({
 <style scoped>
 .card {
     width: 20rem;
-    height: 21.25rem;
+    height: 23.75rem;
     margin: 10px;
     text-align: center;
     border-radius: 5px;
@@ -83,7 +89,6 @@ a:hover { text-decoration: none !important; }
 .create-card h1, .create-card h4 { color: white; text-decoration: none !important; }
 
 
-
 img {
     max-width: 20rem;
     max-height: 10rem;
@@ -98,5 +103,10 @@ img {
 
 .card-body > a:first-of-type {
     border-bottom: none;
+}
+
+.card-body > a:last-of-type {
+    border-top: none;
+    color: white;
 }
 </style>

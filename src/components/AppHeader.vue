@@ -4,7 +4,7 @@
         <div class="btn-group d-inline-block float-right" role="group" aria-label="Basic example">
             <router-link to="/" class="btn btn-info">Information</router-link>
             <router-link to="/dashboard" class="btn btn-info">Dashboard</router-link>
-            <button @click="logOut" class="btn btn-danger">Logout</button>
+            <button @click="logOut" class="btn btn-danger">Logout <i class="fas fa-sign-out-alt"></i></button>
         </div>
     </header>
 </template>

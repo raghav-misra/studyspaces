@@ -1,8 +1,8 @@
 export type IStoreMutation = (store: Storage, payload: any) => void;
 
 export interface IStore {
-    [key: string]: string | (Function);
     $commit(name: string, payload?: any): void;
+    [key: string]: string | Function;
 }
 
 
