@@ -1,7 +1,7 @@
 <template>
     <header>
         <br />
-        <h1 class="text-center">Study App</h1>
+        <h1 class="text-center">StudyScout</h1>
         <br />
         <div class="btn-group d-block text-center" role="group" aria-label="Basic example">
             <router-link to="/dashboard" class="btn btn-info">Dashboard</router-link>
