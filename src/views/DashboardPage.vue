@@ -1,8 +1,13 @@
 <template>
     <section class="container">
         <h1 class="text-center">Hello {{ username }}!</h1>
+        <hr />
         <div>
-            <DeckCard v-for="(deck, i) in decks" deck="deck" :key="i" />
+            <h2>Your Decks</h2>
+            <DeckCard v-for="(deck, i) in decks" :key="i" :deck="deck" />
+            <router-link to="/decks/create">
+                <DeckCard type="create" />
+            </router-link>
         </div>
     </section>
 </template>
@@ -10,19 +15,29 @@
 <script lang="ts">
 import Vue from "vue";
 
-import { APITokenExists } from "@/services/api";
+import { APITokenExists, APIGetData, APILogOut } from "@/services/api";
+import DeckCard from "@/components/DeckCard.vue";
+import store from "@/store";
 
 export default Vue.extend({
-    computed: {
-        username() { return this.$store.state.username; }
+    data() {
+        return {
+            username: "",
+            decks: []
+        }
     },
 
     // Check if logged in, if not, redirect:
     created() {
         if (!APITokenExists()) {
-            this.$router.push("/auth");
+            APILogOut();
         }
-    }
+        else {
+            APIGetData(store.token as string, this);
+        }
+    },
+
+    components: { DeckCard }
 });
 </script>
 

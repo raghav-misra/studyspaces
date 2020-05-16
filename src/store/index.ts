@@ -1,16 +1,7 @@
 import Vue from "vue";
-import Vuex from "vuex";
+import Store from "@/services/create-store";
 
-Vue.use(Vuex);
 
-export default new Vuex.Store({
-    state: {
-        username: ""
-    },
-    mutations: {
-        SET_USERNAME: (state, payload: string) => state.username = payload,
-        LOG_OUT: state => {
-            state.username = ""
-        }
-    }
+export default Store({
+        LOG_OUT: store => store.clear()
 });

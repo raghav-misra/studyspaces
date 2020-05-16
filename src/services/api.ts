@@ -1,8 +1,7 @@
 import router from "@/router";
 import store from "@/store";
 
-const isSecure = false;
-const API_ROUTE = `http://localhost:3000/api`;
+const API_ROUTE = "http://localhost:3000/api";
 
 export async function APISignUp(username: string, password: string) {
     const res = await fetch(`${API_ROUTE}/signup`, {
@@ -36,19 +35,54 @@ export async function APILogIn(username: string, password: string) {
         alert(`Unknown Error: Please try again.`);
     }
     else {
-        sessionStorage.setItem("token", successResponse.token);
+        store.token = successResponse.token;
         alert("Login Successful! Redirecting...");
-        router.push("/dashboard");
-        store.commit("SET_USERNAME", username);
+        router.push("/dashboard").catch(() => {});
     }
 }
 
 export function APILogOut() {
-    sessionStorage.clear();
-    store.commit("LOG_OUT");
+    store.$commit("LOG_OUT");
     router.push("/auth").catch(() => {});
 }
 
 export function APITokenExists() {
-    return sessionStorage.getItem("token") != undefined;
+    return store.token != undefined;
 }
+
+export async function APIGetData(token: string, component: Vue & { username: string; decks: Object[]; }) {    
+    const res = await fetch(`${API_ROUTE}/getuser-token`, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        }
+    });
+
+    const successResponse = await res.json();
+
+    if (successResponse.success) {
+        const { username, userDecks } = successResponse.user;
+        store.username = username;
+        store.decks = JSON.stringify(userDecks);
+
+        component.username = username;
+        component.decks.push(...userDecks);
+    }
+    else {
+        alert("Session timeout, please re-login.")
+        APILogOut();
+    }
+}
+
+export async function APIGetDeck(deckID: string) {
+    const res = await fetch(`${API_ROUTE}/getdeck`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ deckID })
+    });
+
+    const successResponse = await res.json();
+
+    return successResponse.deck;
+}
+
