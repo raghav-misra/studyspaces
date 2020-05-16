@@ -5,10 +5,6 @@
     </main>
 </template>
 
-<style>
-
-</style>
-
 <script lang="ts">
 import Vue from "vue";
 

@@ -1,4 +1,5 @@
 import router from "@/router";
+import store from "@/store";
 
 const isSecure = false;
 const API_ROUTE = `http://localhost:3000/api`;
@@ -38,21 +39,16 @@ export async function APILogIn(username: string, password: string) {
         sessionStorage.setItem("token", successResponse.token);
         alert("Login Successful! Redirecting...");
         router.push("/dashboard");
+        store.commit("SET_USERNAME", username);
     }
 }
 
+export function APILogOut() {
+    sessionStorage.clear();
+    store.commit("LOG_OUT");
+    router.push("/auth").catch(() => {});
+}
+
 export function APITokenExists() {
-           return sessionStorage.getItem("token") != undefined;
-       }
-
-/*
-
-
-SIgnup:
-
-/api/login
-POST A JSON
-{email:"tedd@LOL.io",password:"plaintextsecure"}
-Response is {"success": true || false error:"this shows if u error", token:"this show if successs"}
-
-*/
+    return sessionStorage.getItem("token") != undefined;
+}
