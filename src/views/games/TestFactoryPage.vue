@@ -152,7 +152,7 @@ export default Vue.extend({
     methods: {
         initSocket() {
             const vm = this;
-            this.socket = io("http://localhost:3000/game/test-factory")
+            this.socket = io("http://studyspaces.glitch.me/game/test-factory")
             let socket = this.socket;
             //Errors
             socket.on("errorMsg", (msg: string) => {
