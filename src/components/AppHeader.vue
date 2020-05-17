@@ -1,7 +1,7 @@
 <template>
     <header>
         <router-link to="/"
-            ><h1 class="d-inline-block">StudyCove</h1></router-link
+            ><h1 class="d-inline-block">StudySpaces</h1></router-link
         >
         <div class="btn-group d-inline-block float-right" role="group">
             <router-link to="/dashboard" class="btn btn-info">
