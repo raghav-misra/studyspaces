@@ -1,11 +1,11 @@
 <template>
-    <section class="container">
-        <h1 class="text-center">Hello {{ username }}!</h1>
+    <section class="container text-center">
+        <h1>Hello {{ username }}!</h1>
         <hr />
         <div>
             <h2>Your Decks</h2>
             <DeckCard v-for="(deck, i) in decks" :key="i" :deck="deck" />
-            <router-link to="/decks/create">
+            <router-link to="/decks/edit/new-deck">
                 <DeckCard type="create" />
             </router-link>
         </div>
@@ -23,17 +23,25 @@ export default Vue.extend({
     data() {
         return {
             username: "",
-            decks: []
+            decks: [] as string[]
         }
     },
 
     // Check if logged in, if not, redirect:
-    created() {
+    async created() {
         if (!APITokenExists()) {
             APILogOut();
         }
         else {
-            APIGetData(store.token as string, this);
+            const data = await APIGetData(store.token as string);
+            await this.loadData(data);
+        }
+    },
+
+    methods: {
+        loadData(data: Record<string, any> | null) {
+            this.username = (data as any).username;
+            this.decks.push(...(data as any).decks);
         }
     },
 

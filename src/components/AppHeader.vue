@@ -1,23 +1,29 @@
 <template>
     <header>
-        <h1 class="d-inline-block">StudyScout</h1>
-        <div class="btn-group d-inline-block float-right" role="group" aria-label="Basic example">
-            <router-link to="/" class="btn btn-info">Information</router-link>
-            <router-link to="/dashboard" class="btn btn-info">Dashboard</router-link>
-            <button @click="logOut" class="btn btn-danger">Logout <i class="fas fa-sign-out-alt"></i></button>
+        <router-link to="/"><h1 class="d-inline-block">StudyCove</h1></router-link>
+        <div class="btn-group d-inline-block float-right" role="group">
+            <router-link to="/dashboard" class="btn btn-info">
+                Dashboard
+            </router-link>
+
+            <button @click="logOut" class="btn btn-danger">
+                Logout <i class="fas fa-sign-out-alt"></i>
+            </button>
         </div>
     </header>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { APILogOut } from '@/services/api';
+import { APILogOut } from "@/services/api";
 
 export default Vue.extend({
     methods: {
-        logOut() { APILogOut(); }
-    }
-})
+        logOut() {
+            APILogOut();
+        },
+    },
+});
 </script>
 
 <style scoped>

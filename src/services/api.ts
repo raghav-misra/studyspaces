@@ -1,8 +1,11 @@
 import router from "@/router";
 import store from "@/store";
+import { IUIDeck, IDeckParam } from "@/types";
 
+/* Root Route */
 const API_ROUTE = "http://localhost:3000/api";
 
+/* Create Account */
 export async function APISignUp(username: string, password: string) {
     const res = await fetch(`${API_ROUTE}/signup`, {
         method: "POST",
@@ -20,6 +23,7 @@ export async function APISignUp(username: string, password: string) {
     }
 }
 
+/* Log in to frontend */
 export async function APILogIn(username: string, password: string) {
     const res = await fetch(`${API_ROUTE}/login`, {
         method: "POST",
@@ -41,16 +45,19 @@ export async function APILogIn(username: string, password: string) {
     }
 }
 
+/* Log out of frontend */
 export function APILogOut() {
     store.$commit("LOG_OUT");
     router.push("/auth").catch(() => {});
 }
 
+/* If token in sessionStorage */
 export function APITokenExists() {
     return store.token != undefined;
 }
 
-export async function APIGetData(token: string, component: Vue & { username: string; decks: Object[]; }) {    
+/* Get Base User Data */
+export async function APIGetData(token: string) {    
     const res = await fetch(`${API_ROUTE}/getuser-token`, {
         method: "POST",
         headers: {
@@ -64,16 +71,16 @@ export async function APIGetData(token: string, component: Vue & { username: str
         const { username, userDecks } = successResponse.user;
         store.username = username;
         store.decks = JSON.stringify(userDecks);
-
-        component.username = username;
-        component.decks.push(...userDecks);
+        return { username, decks: userDecks }
     }
     else {
         alert("Session timeout, please re-login.")
         APILogOut();
+        return null;
     }
 }
 
+/* Get Deck Object From ID */
 export async function APIGetDeck(deckID: string) {
     const res = await fetch(`${API_ROUTE}/getdeck`, {
         method: "POST",
@@ -86,21 +93,72 @@ export async function APIGetDeck(deckID: string) {
     return successResponse.deck;
 }
 
-export async function APIRemoveDeck(token: string, deckID: string) {
-    return false;
-    
-    const res = await fetch(`${API_ROUTE}/deleteDeck`, {
+/* Delete Deck From ID */
+export async function APIRemoveDeck(token: string, deckID: string, errorAlert = true) {
+    const res = await fetch(`${API_ROUTE}/deletedeck`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer ${token}"
+            "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({ deckID })
     });
     
     const successResponse = await res.json();
 
-    if (successResponse.success) console.log("Deleted Deck!");
-    else console.log(`Error while deleting deck: ${successResponse.error}`);
+    if (successResponse.success)
+        errorAlert && alert("Deleted Deck!");
+    else
+        errorAlert && alert(`Error while deleting deck: ${successResponse.error}`);
+
+    return successResponse.success;
 }
 
+/* Create Deck */
+export async function APICreateDeck(token: string, deckObject: IUIDeck, sendAlert = true) {
+    const deckParams: IDeckParam = {
+        title: deckObject.title,
+        img: deckObject.img,
+        content: deckObject.cards.map(card => {
+            return {
+                q: card.question,
+                a: card.answer,
+                wa: card.incorrect.map(a => ({ a }))
+            };
+        })
+    };
+
+    const res = await fetch(`${API_ROUTE}/createdeck`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(deckParams)
+    });
+
+    const successResponse = await res.json();
+
+    if (successResponse.success)
+        sendAlert && alert("Creation successful!");
+    else
+        sendAlert && alert("Creation failed!");
+    
+    return successResponse.success;
+}
+
+/* Edit Existing Deck */
+export async function APIEditDeck(token: string, deckObject: IUIDeck) {
+    const deleteSuccess = await APIRemoveDeck(token, deckObject.id, false);
+
+    if (await deleteSuccess) {
+        const rewriteSuccess = await APICreateDeck(token, deckObject, false);
+
+        if (await rewriteSuccess) {
+            alert("Deck successfully updated!");
+            router.push("/dashboard").catch(() => { });
+        }
+        else alert("An error occurred while overwriting the deck.");
+    }
+    else alert("An error occurred while overwriting the deck.");
+}
