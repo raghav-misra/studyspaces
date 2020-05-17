@@ -3,7 +3,7 @@ import store from "@/store";
 import { IUIDeck, IDeckParam } from "@/types";
 
 /* Root Route */
-export const API_ROUTE = "http://studyspaces.glitch.me/api";
+export const API_ROUTE = "https://studyspaces.glitch.me/api";
 
 /* Create Account */
 export async function APISignUp(username: string, password: string) {
