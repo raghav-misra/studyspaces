@@ -34,14 +34,21 @@
 import Vue from "vue";
 
 export default Vue.extend({
-    props: { id: Number },
+    props: { 
+        id: {
+            type: Number, 
+            required: true
+        },
+        baseCard: {
+            type: Object,
+            required: true
+        }
+    },
 
     data() {
-        return {
-            question: "",
-            answer: "",
-            incorrect: ["", "", ""]
-        }
+        let tmp = JSON.parse(JSON.stringify(this.baseCard));
+        delete tmp.id;
+        return tmp;
     },
 
     computed: {
@@ -50,7 +57,7 @@ export default Vue.extend({
         },
         incorrect0(): string { return this.incorrect[0]; },
         incorrect1(): string { return this.incorrect[1]; },
-        incorrect3(): string { return this.incorrect[2]; }
+        incorrect2(): string { return this.incorrect[2]; }
     },
 
     methods: {

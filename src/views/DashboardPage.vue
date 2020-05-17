@@ -15,7 +15,7 @@
 <script lang="ts">
 import Vue from "vue";
 
-import { APITokenExists, APIGetData, APILogOut } from "@/services/api";
+import { APITokenExists, APIGetData, APILogOut } from "@/services/APIWrapper";
 import DeckCard from "@/components/DeckCard.vue";
 import store from "@/store";
 
@@ -23,16 +23,15 @@ export default Vue.extend({
     data() {
         return {
             username: "",
-            decks: [] as string[]
-        }
+            decks: [] as string[],
+        };
     },
 
     // Check if logged in, if not, redirect:
     async created() {
         if (!APITokenExists()) {
             APILogOut();
-        }
-        else {
+        } else {
             const data = await APIGetData(store.token as string);
             await this.loadData(data);
         }
@@ -42,10 +41,10 @@ export default Vue.extend({
         loadData(data: Record<string, any> | null) {
             this.username = (data as any).username;
             this.decks.push(...(data as any).decks);
-        }
+        },
     },
 
-    components: { DeckCard }
+    components: { DeckCard },
 });
 </script>
 

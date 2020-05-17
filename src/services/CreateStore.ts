@@ -10,12 +10,12 @@ export default function Store(mutations: Record<string, IStoreMutation>) {
     return new Proxy({}, {
         get(target: never, p: string) {
             if (p === "$commit") {
-                return (name: string, payload: any) => mutations[name](sessionStorage, payload);
+                return (name: string, payload: any) => mutations[name](localStorage, payload);
             }
-            else { return sessionStorage.getItem(p); }
+            else { return localStorage.getItem(p); }
         },
         set(target: never, p: string, value: string) {
-            sessionStorage.setItem(p, value);
+            localStorage.setItem(p, value);
             return true;
         }
     }) as IStore;

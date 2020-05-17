@@ -18,15 +18,19 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-    form { flex: 1; margin: 0 2rem; }
+form { flex: 1; margin: 0 2rem; }
 
-    form {
-        padding: 1.5rem;
-    }
+form {
+    padding: 1.5rem;
+}
 
-    div.vertical-sep {
-        height: 50vh;
-        width: 0.125rem;
-        background: black;
-    }
+div.vertical-sep {
+    height: 50vh;
+    width: 0.125rem;
+    background: black;
+}
+
+textarea, input {
+    border: 1.5px solid var(--primary);
+}
 </style>

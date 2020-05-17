@@ -1,5 +1,5 @@
 {
-  "name": "study-cove-frontend",
+  "name": "study-spaces-frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,12 +8,12 @@
   },
   "dependencies": {
     "core-js": "^3.6.4",
-    "socket.io-client": "^2.3.0",
     "vue": "^2.6.11",
-    "vue-router": "^3.1.6",
-    "vuex": "^3.1.3"
+    "vue-router": "^3.1.6"
   },
   "devDependencies": {
+    "@types/howler": "^2.1.2",
+    "@types/socket.io-client": "^1.4.33",
     "@vue/cli-plugin-babel": "~4.3.0",
     "@vue/cli-plugin-router": "~4.3.0",
     "@vue/cli-plugin-typescript": "~4.3.0",

@@ -19,11 +19,31 @@ export interface ICardParam {
 }
 
 export interface IDeckParam {
+    author?: string;
     title: string;
     img: string;
     content: ICardParam[];
 }
 
-
-
 export type ICardField = "question" | "answer" | 0 | 1 | 2;
+
+export interface IRoomData {
+    readOnlyplayers: Record<string, IPlayer>,
+    answers: string[] | object[];
+}
+
+export interface IPlayer {
+    points: number,
+    leader: boolean,
+    name: string,
+    answer: string | null,
+    ready: boolean;
+    choose: ""
+}
+
+export interface IGameData {
+    title: string;
+    code: string;
+    description: string;
+    enabled: boolean;
+}

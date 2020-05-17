@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { APIGetDeck, APIRemoveDeck } from "@/services/api";
+import { APIGetDeck, APIRemoveDeck } from "@/services/APIWrapper";
 import store from "@/store";
 
 export default Vue.extend({
@@ -39,8 +39,7 @@ export default Vue.extend({
         if (this.deck) {
             const deckObject = await APIGetDeck(this.deck);
             await this.loadDeck(deckObject);
-        }
-        else this.hidden = false;
+        } else this.hidden = false;
     },
     props: {
         type: {
@@ -67,13 +66,15 @@ export default Vue.extend({
             }
         },
         async deleteDeck() {
-            const success: boolean = await APIRemoveDeck(store.token as string, this.deck);
+            const success: boolean = await APIRemoveDeck(
+                store.token as string,
+                this.deck
+            );
             if (await success) this.hide();
-            
         },
         hide() {
             this.hidden = true;
-        }
+        },
     },
 });
 </script>
